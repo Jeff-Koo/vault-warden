@@ -1,0 +1,63 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:1.36.0
+    restart: always
+    environment:
+      DOMAIN: "https://${VW_DOMAIN}"
+      SIGNUPS_ALLOWED: ${VW_SIGNUPS_ALLOWED}
+      ADMIN_TOKEN: ${VW_ADMIN_TOKEN}
+      # Database Settings
+      DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}"
+      # SSO Settings
+      #SSO_ENABLED: ${SSO_ENABLE:-false}
+      #SSO_AUTHORITY: ${SSO_ISSUER_URL}
+      #SSO_CLIENT_ID: ${SSO_CLIENT_ID}
+      #SSO_CLIENT_SECRET: ${SSO_CLIENT_SECRET}
+      #SSO_SCOPES: email profile offline_access
+      #SSO_ALLOW_UNKNOWN_EMAIL_VERIFICATION: "false"
+      #SSO_CLIENT_CACHE_EXPIRATION: 0
+      #SSO_ONLY: "false" # Set to true to disable email+master password login and require SSO
+      #SSO_SIGNUPS_MATCH_EMAIL: "true" # Match first SSO login to existing account by email
+    networks:
+      - vault-network
+      - traefik-proxy
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./vw-data/:/data/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.krystal-vault.rule=Host(`${VW_DOMAIN}`)"
+      - "traefik.http.routers.krystal-vault.entrypoints=websecure"
+      - "traefik.http.routers.krystal-vault.tls=true"
+      - "traefik.http.routers.krystal-vault.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.krystal-vault.service=krystal-vault-svc"
+      - "traefik.http.services.krystal-vault-svc.loadbalancer.server.port=80"
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    volumes:
+      - ./vw-db/:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - vault-network
+    labels:
+      - "traefik.enable=false"
+
+networks:
+  traefik-proxy:
+    external: true
+    name: traefik
+  vault-network:
+    driver: bridge
