@@ -1,6 +1,7 @@
 services:
   vaultwarden:
     image: vaultwarden/server:1.36.0
+    container_name: vault-warden-app
     restart: always
     environment:
       DOMAIN: "https://${VW_DOMAIN}"
@@ -38,6 +39,7 @@ services:
 
   db:
     image: postgres:16-alpine
+    container_name: vault-db
     restart: unless-stopped
     volumes:
       - ./vw-db/:/var/lib/postgresql/data/
