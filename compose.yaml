@@ -1,7 +1,7 @@
 services:
   vaultwarden:
     image: vaultwarden/server:1.36.0
-    container_name: vault-warden-app
+    container_name: vault-app
     restart: always
     environment:
       DOMAIN: "https://${VW_DOMAIN}"
