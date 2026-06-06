@@ -2,6 +2,10 @@
 # ========================================
 # Vaultwarden -> Cloudflare R2 Backup Script
 # ========================================
+
+# Ensure cron can locate docker, docker-compose, and restic binaries
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
 set -euo pipefail
 
 ### Settings
