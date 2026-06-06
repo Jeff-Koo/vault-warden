@@ -39,7 +39,7 @@ services:
 
   db:
     image: postgres:16-alpine
-    container_name: vault-db
+    container_name: vault-db # RECOMMEND: NOT TO CHANGE, since it is used in backup / restore script
     restart: unless-stopped
     volumes:
       - ./vw-db/:/var/lib/postgresql/data/
