@@ -128,4 +128,5 @@ cat /home/ubuntu/vaultwarden/backup.log
 1. **「救命包」離線備份：**
 因為 `compose.yaml`、`.env` 和 `restore.sh` 是啟動還原的先決條件。**強烈建議**將這三個檔案單獨加密壓縮，備份在你的手機、隨身碟或另一台安全的個人電腦中。
 2. **HTTPS 反向代理限制：**
-Vaultwarden 在還原後，**強制需要 HTTPS 環境**（由外部反向代理如 Nginx/Caddy/HAProxy 提供）才能解鎖瀏覽器的 Web Crypto API。若在 `http://` 狀態下嘗試登入，會引發瀏覽器拒絕加解密而登入失敗。
+Vaultwarden 在還原後，**強制需要 HTTPS 環境**（由外部反向代理如 Nginx/Caddy/HAProxy/Traefik 提供）才能解鎖瀏覽器的 Web Crypto API。若在 `http://` 狀態下嘗試登入，會引發瀏覽器拒絕加解密而登入失敗。
+參考 [Traefik-Proxy 項目](https://github.com/Jeff-Koo/Traefik-Proxy) 以設置 Traefik 反向代理。
