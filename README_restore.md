@@ -15,6 +15,8 @@
     * [ ] `RESTIC_REPOSITORY`（備份儲存桶的 S3 網址）
     * [ ] `RESTIC_PASSWORD`（Restic 的加密解密密碼）
     * [ ] `POSTGRES_PASSWORD`（PostgreSQL 資料庫密碼）
+        * [ ] `POSTGRES_USER`（PostgreSQL 資料庫用戶名，建議保留）
+        * [ ] `POSTGRES_DB`（PostgreSQL 資料庫名，建議保留）
 3. [ ] **Docker 部署檔：** `compose.yaml`（建議一同放入救命包備用）。
 4. [ ] **自動化還原檔：** `restore.sh` 腳本。
 5. [ ] **反向代理設定：** 原本的 Nginx / Caddy / Traefik / HAProxy 的 HTTPS 憑證設定。
