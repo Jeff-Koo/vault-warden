@@ -110,9 +110,10 @@ bash ./restore.sh
 
 Vaultwarden 必須在 **HTTPS 增強安全環境**下才能運作，否則瀏覽器會禁用加密元件導致無法登入。
 
-1. 啟動你原本使用的反向代理服務（如 Nginx、Caddy 或 HAProxy）。
-2. 為你的網域（`vault.yourdomain.com`）重新向 Let's Encrypt 申請 SSL 憑證。
-3. 確保外部的 `443` 加密流量能正確導向本機的 Vaultwarden 容器埠口。
+1. **部署 Traefik 服務：** 本專案的生產環境使用 Traefik 作為反向代理與自動 SSL 證書管理。請參考獨立維護的 GitHub 倉庫：
+   👉 **[Traefik-Proxy 配置指南](https://github.com/Jeff-Koo/Traefik-Proxy)** *(請依據該倉庫的說明，快速在新伺服器上跑起 Traefik 容器與專屬的設定檔)*
+2. **驗證標籤（Labels）：** 確保本專案的 `compose.yaml` 內，關於 Traefik 的 `labels` 設定與該倉庫定義的進入點（Entrypoints）與網路（Docker Network）完全一致。
+3. **檢查憑證：** 確保外部的 `443` 加密流量能透過 Traefik 正確導向本機的 Vaultwarden 容器，並成功由 Let's Encrypt 簽發新伺服器環境的 SSL 憑證。
 
 ---
 
